@@ -6,7 +6,30 @@ body {
 }
 
 .container {
+  display: flex;
   width: 80%;
   margin: auto;
   overflow: hidden;
+}
+
+header {
+  background: #333;
+  color: #fff;
+  padding: 1rem 0;
+}
+
+header h1 {
+  display: inline;
+  margin: 0;
+}
+
+#news-stories {
+  flex: 3;
+  margin-right: 2rem;
+}
+
+#sidebar {
+  flex: 1;
+  position: sticky;
+  top: 1rem;
 }
