@@ -10,7 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        displayNewsArticles(data.articles, newsContainer);
+        const sortedArticles = sortArticlesByDate(data.articles);
+        displayNewsArticles(sortedArticles, newsContainer);
       })
       .catch((error) => {
         console.error("Error fetching news articles:", error);
@@ -41,18 +42,17 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  fetchTopHeadlines();
-
 function sortArticlesByDate(articles, descending = true) {
-  return articles.sort((a, b) => {
-    const dateA = new Date(a.publishedAt);
-    const dateB = new Date(b.publishedAt);
-    return descending ? dateB - dateA : dateA - dateB;
-  });
-}
-.then((data) => {
-  const sortedArticles = sortArticlesByDate(data.articles);
-  displayNewsArticles(sortedArticles, newsContainer);
-})
+    return articles.sort((a, b) => {
+      const dateA = new Date(a.publishedAt);
+      const dateB = new Date(b.publishedAt);
+      return descending ? dateB - dateA : dateA - dateB;
+    });
+  }
 
+  function filterArticlesBySource(articles, sourceId) {
+    return articles.filter((article) => article.source.id === sourceId);
+  }
+
+  fetchTopHeadlines();
 });
