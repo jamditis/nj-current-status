@@ -8,19 +8,23 @@ document.addEventListener("DOMContentLoaded", function () {
     spinner.style.display = "block";
 
     Promise.all(feedUrls.map((feedUrl) => fetchRssFeed(feedUrl)))
-      .then((allArticles) => {
-        const articles = allArticles.flat();
-        const sortedArticles = sortArticlesByDate(articles);
-        const filteredArticles = filterArticles(sortedArticles);
-        displayNewsArticles(filteredArticles, newsContainer);
-        spinner.style.display = "none";
-      })
-      .catch((error) => {
-        console.error("Error fetching news articles:", error);
-        spinner.style.display = "none";
-        alert("An error occurred while fetching news articles. Please try again later.");
-      });
-  }
+    .then((allArticles) => {
+      const articles = allArticles.flat();
+      const sortedArticles = sortArticlesByDate(articles);
+
+      // Filter articles based on user input
+      const filteredArticles = filterArticles(sortedArticles);
+
+      // Display filtered articles
+      displayNewsArticles(filteredArticles, newsContainer);
+
+      spinner.style.display = "none";
+    })
+    .catch((error) => {
+      console.error("Error fetching news articles:", error);
+      spinner.style.display = "none";
+    });
+}
 
   function filterArticles(articles) {
     const sourceFilter = document.getElementById("source-filter").value;
@@ -113,30 +117,6 @@ document.addEventListener("DOMContentLoaded", function () {
   "https://www.njspotlightnews.org/news/feed/",
   "https://www.nj.com/arc/outboundfeeds/rss/?outputType=xml",
 ]);
-
-function fetchNewsArticles(feedUrls) {
-  const newsContainer = document.getElementById("news-stories");
-  const spinner = document.getElementById("spinner");
-  spinner.style.display = "block";
-
-  Promise.all(feedUrls.map((feedUrl) => fetchRssFeed(feedUrl)))
-    .then((allArticles) => {
-      const articles = allArticles.flat();
-      const sortedArticles = sortArticlesByDate(articles);
-
-      // Filter articles based on user input
-      const filteredArticles = filterArticles(sortedArticles);
-
-      // Display filtered articles
-      displayNewsArticles(filteredArticles, newsContainer);
-
-      spinner.style.display = "none";
-    })
-    .catch((error) => {
-      console.error("Error fetching news articles:", error);
-      spinner.style.display = "none";
-    });
-}
 
 function filterArticles(articles) {
   const sourceFilter = document.getElementById("source-filter").value;
