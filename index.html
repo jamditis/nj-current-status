@@ -13,10 +13,37 @@
       <ul>
         <!-- Add more navigation links if needed -->
       </ul>
+      <div class="sort-controls">
+  <button id="sort-newest">Sort by newest</button>
+  <button id="sort-oldest">Sort by oldest</button>
+  <button id="sort-relevance">Sort by relevance</button>
+</div>
     </nav>
     <div class="filter-controls">
-      <!-- Add dropdown menus for filtering and sorting options here -->
-    </div>
+  <label for="source-filter">Filter by source:</label>
+  <select id="source-filter">
+    <option value="">All sources</option>
+    <option value="northjersey">NorthJersey.com</option>
+    <option value="app">Asbury Park Press</option>
+    <!-- Add more source options here -->
+  </select>
+  <label for="category-filter">Filter by category:</label>
+  <select id="category-filter">
+    <option value="">All categories</option>
+    <option value="politics">Politics</option>
+    <option value="sports">Sports</option>
+    <!-- Add more category options here -->
+  </select>
+  <label for="date-filter">Filter by date range:</label>
+  <select id="date-filter">
+    <option value="">All dates</option>
+    <option value="24">Last 24 hours</option>
+    <option value="48">Last 48 hours</option>
+    <option value="7">Last 7 days</option>
+    <!-- Add more date range options here -->
+  </select>
+</div>
+
   </header>
   <main>
     <section id="news-stories">
