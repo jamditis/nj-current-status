@@ -105,9 +105,12 @@ function displayNewsArticles(articles, container) {
     const articleElement = document.createElement("div");
     articleElement.classList.add("article");
 
-    const imgElement = document.createElement("img");
-    imgElement.src = article.imageUrl;
-    imgElement.alt = article.title;
+    if (article.imageUrl) {
+      const imgElement = document.createElement("img");
+      imgElement.src = article.imageUrl;
+      imgElement.alt = article.title;
+      articleElement.appendChild(imgElement);
+    }
 
     const titleElement = document.createElement("h3");
     titleElement.textContent = article.title;
@@ -115,24 +118,30 @@ function displayNewsArticles(articles, container) {
     const descriptionElement = document.createElement("p");
     descriptionElement.textContent = article.description;
 
-    articleElement.appendChild(imgElement);
     articleElement.appendChild(titleElement);
     articleElement.appendChild(descriptionElement);
     container.appendChild(articleElement);
   });
 }
 
+
 function fetchNewsArticles(feedUrls) {
+  const spinner = document.getElementById("spinner");
+  spinner.style.display = "block";
+
   Promise.all(feedUrls.map((feedUrl) => fetchRssFeed(feedUrl)))
     .then((allArticles) => {
       const articles = allArticles.flat();
       const sortedArticles = sortArticlesByDate(articles);
       displayNewsArticles(sortedArticles, newsContainer);
+      spinner.style.display = "none";
     })
     .catch((error) => {
       console.error("Error fetching news articles:", error);
+      spinner.style.display = "none";
     });
 }
+
 
 function fetchRssFeed(feedUrl) {
   const proxyUrl = "https://api.allorigins.win/raw?url=";
