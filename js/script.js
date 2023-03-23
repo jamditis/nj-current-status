@@ -43,5 +43,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   fetchTopHeadlines();
 
-  // Add more JavaScript code for sorting, filtering, and the floating sidebar behavior
+function sortArticlesByDate(articles, descending = true) {
+  return articles.sort((a, b) => {
+    const dateA = new Date(a.publishedAt);
+    const dateB = new Date(b.publishedAt);
+    return descending ? dateB - dateA : dateA - dateB;
+  });
+}
+.then((data) => {
+  const sortedArticles = sortArticlesByDate(data.articles);
+  displayNewsArticles(sortedArticles, newsContainer);
+})
+
 });
