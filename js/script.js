@@ -8,23 +8,23 @@ document.addEventListener("DOMContentLoaded", function () {
     spinner.style.display = "block";
 
     Promise.all(feedUrls.map((feedUrl) => fetchRssFeed(feedUrl)))
-    .then((allArticles) => {
-      const articles = allArticles.flat();
-      const sortedArticles = sortArticlesByDate(articles);
+      .then((allArticles) => {
+        const articles = allArticles.flat();
+        const sortedArticles = sortArticlesByDate(articles);
 
-      // Filter articles based on user input
-      const filteredArticles = filterArticles(sortedArticles);
+        // Filter articles based on user input
+        const filteredArticles = filterArticles(sortedArticles);
 
-      // Display filtered articles
-      displayNewsArticles(filteredArticles, newsContainer);
+        // Display filtered articles
+        displayNewsArticles(filteredArticles, newsContainer);
 
-      spinner.style.display = "none";
-    })
-    .catch((error) => {
-      console.error("Error fetching news articles:", error);
-      spinner.style.display = "none";
-    });
-}
+        spinner.style.display = "none";
+      })
+      .catch((error) => {
+        console.error("Error fetching news articles:", error);
+        spinner.style.display = "none";
+      });
+  }
 
   function filterArticles(articles) {
     const sourceFilter = document.getElementById("source-filter").value;
