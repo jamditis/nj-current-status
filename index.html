@@ -8,21 +8,38 @@
 </head>
 <body>
   <header>
-    <div class="container">
-      <h1>NJ Current Status</h1>
-      <!-- Add navigation and dropdown menus for filtering and sorting here -->
+    <nav>
+      <a href="#" class="logo">NJ Current Status</a>
+      <ul>
+        <!-- Add more navigation links if needed -->
+      </ul>
+    </nav>
+    <div class="filter-controls">
+      <!-- Add dropdown menus for filtering and sorting options here -->
     </div>
   </header>
   <main>
-    <div class="container">
-      <section id="news-stories">
-        <!-- News stories will be loaded dynamically -->
-      </section>
-      <aside id="sidebar">
-        <!-- Sidebar content will go here -->
-      </aside>
-    </div>
+    <section id="news-stories">
+      <!-- News stories will be loaded dynamically -->
+    </section>
+    <aside id="floating-sidebar">
+      <div class="info-panel">
+        <!-- Add information about the website and its creator here -->
+      </div>
+      <div class="trending-stories">
+        <h3>Trending Stories</h3>
+        <select id="trending-date-range">
+          <option value="24">Last 24 hours</option>
+          <option value="48">Last 48 hours</option>
+          <option value="72">Last 72 hours</option>
+        </select>
+        <ul id="trending-list">
+          <!-- Trending stories will be loaded dynamically -->
+        </ul>
+      </div>
+    </aside>
   </main>
+
   <script src="js/script.js"></script>
 </body>
 </html>
