@@ -3,92 +3,71 @@ document.addEventListener("DOMContentLoaded", function () {
   const trendingList = document.getElementById("trending-list");
   const dateRangeSelect = document.getElementById("trending-date-range");
 
-  function fetchRssFeed(feedUrl) {
-    const proxyUrl = "https://api.allorigins.win/raw?url=";
-    const url = proxyUrl + encodeURIComponent(feedUrl);
-
-    return fetch(url)
-      .then((response) => response.text())
-      .then((data) => {
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(data, "application/xml");
-        const items = xml.querySelectorAll("item");
-        const articles = [];
-
-        items.forEach((item) => {
-          const title = item.querySelector("title").textContent;
-          const link = item.querySelector("link").textContent;
-          const description = item.querySelector("description").textContent;
-          const pubDate = item.querySelector("pubDate").textContent;
-          const imageUrl = item.querySelector("media\\:content, content")?.getAttribute("url") || "";
-
-          articles.push({
-            title,
-            link,
-            description,
-            pubDate,
-            imageUrl,
-          });
-        });
-
-        return articles;
-      });
-  }
-
   function fetchNewsArticles(feedUrls) {
+    const spinner = document.getElementById("spinner");
+    spinner.style.display = "block";
+
     Promise.all(feedUrls.map((feedUrl) => fetchRssFeed(feedUrl)))
       .then((allArticles) => {
         const articles = allArticles.flat();
         const sortedArticles = sortArticlesByDate(articles);
-        displayNewsArticles(sortedArticles, newsContainer);
+        const filteredArticles = filterArticles(sortedArticles);
+        displayNewsArticles(filteredArticles, newsContainer);
+        spinner.style.display = "none";
       })
       .catch((error) => {
         console.error("Error fetching news articles:", error);
+        spinner.style.display = "none";
+        alert("An error occurred while fetching news articles. Please try again later.");
       });
   }
-function filterArticles(articles) {
-  const sourceFilter = document.getElementById("source-filter").value;
-  const categoryFilter = document.getElementById("category-filter").value;
-  const dateFilter = document.getElementById("date-filter").value;
 
-  return articles.filter((article) => {
-    let include = true;
+  function filterArticles(articles) {
+    const sourceFilter = document.getElementById("source-filter").value;
+    const categoryFilter = document.getElementById("category-filter").value;
+    const dateFilter = document.getElementById("date-filter").value;
 
-    if (sourceFilter && article.source !== sourceFilter) {
-      include = false;
-    }
+    return articles.filter((article) => {
+      let include = true;
 
-    if (categoryFilter && !article.categories.includes(categoryFilter)) {
-      include = false;
-    }
+      if (sourceFilter && article.source !== sourceFilter) {
+        include = false;
+      }
 
-    if (dateFilter && Date.now() - new Date(article.pubDate) > dateFilter * 3600 * 1000) {
-      include = false;
-    }
+      if (categoryFilter && !article.categories.includes(categoryFilter)) {
+        include = false;
+      }
 
-    return include;
-  });
-}
-function sortArticles(articles) {
-  const newestButton = document.getElementById("sort-newest");
-  const oldestButton = document.getElementById("sort-oldest");
-  const relevanceButton = document.getElementById("sort-relevance");
+      if (dateFilter && Date.now() - new Date(article.pubDate) > dateFilter * 3600 * 1000) {
+        include = false;
+      }
 
-  newestButton.addEventListener("click", () => {
-    const sortedArticles = sortArticlesByDate(articles, true);
-    displayNewsArticles(sortedArticles, newsContainer);
-  });
+      return include;
+    });
+  }
 
-  oldestButton.addEventListener("click", () => {
-    const sortedArticles = sortArticlesByDate(articles, false);
-    displayNewsArticles(sortedArticles, newsContainer);
-  });
+  function sortArticles(articles) {
+    const newestButton = document.getElementById("sort-newest");
+    const oldestButton = document.getElementById("sort-oldest");
+    const relevanceButton = document.getElementById("sort-relevance");
 
-  relevanceButton.addEventListener("click", () => {
-    // Implement sorting by relevance here
-    alert("Sorting by relevance coming soon!");
-  });
-}
+    newestButton.addEventListener("click", () => {
+      const sortedArticles = sortArticlesByDate(articles, true);
+      const filteredArticles = filterArticles(sortedArticles);
+      displayNewsArticles(filteredArticles, newsContainer);
+    });
+
+    oldestButton.addEventListener("click", () => {
+      const sortedArticles = sortArticlesByDate(articles, false);
+      const filteredArticles = filterArticles(sortedArticles);
+      displayNewsArticles(filteredArticles, newsContainer);
+    });
+
+    relevanceButton.addEventListener("click", () => {
+      // Implement sorting by relevance here
+      alert("Sorting by relevance coming soon!");
+    });
+  }
 
   function displayNewsArticles(articles, container) {
     container.innerHTML = "";
@@ -97,9 +76,12 @@ function sortArticles(articles) {
       const articleElement = document.createElement("div");
       articleElement.classList.add("article");
 
-      const imgElement = document.createElement("img");
-      imgElement.src = article.imageUrl;
-      imgElement.alt = article.title;
+      if (article.imageUrl) {
+        const imgElement = document.createElement("img");
+        imgElement.src = article.imageUrl;
+        imgElement.alt = article.title;
+        articleElement.appendChild(imgElement);
+      }
 
       const titleElement = document.createElement("h3");
       titleElement.textContent = article.title;
@@ -107,7 +89,6 @@ function sortArticles(articles) {
       const descriptionElement = document.createElement("p");
       descriptionElement.textContent = article.description;
 
-      articleElement.appendChild(imgElement);
       articleElement.appendChild(titleElement);
       articleElement.appendChild(descriptionElement);
       container.appendChild(articleElement);
@@ -133,34 +114,8 @@ function sortArticles(articles) {
   "https://www.nj.com/arc/outboundfeeds/rss/?outputType=xml",
 ]);
 
-function displayNewsArticles(articles, container) {
-  container.innerHTML = "";
-
-  articles.forEach((article) => {
-    const articleElement = document.createElement("div");
-    articleElement.classList.add("article");
-
-    if (article.imageUrl) {
-      const imgElement = document.createElement("img");
-      imgElement.src = article.imageUrl;
-      imgElement.alt = article.title;
-      articleElement.appendChild(imgElement);
-    }
-
-    const titleElement = document.createElement("h3");
-    titleElement.textContent = article.title;
-
-    const descriptionElement = document.createElement("p");
-    descriptionElement.textContent = article.description;
-
-    articleElement.appendChild(titleElement);
-    articleElement.appendChild(descriptionElement);
-    container.appendChild(articleElement);
-  });
-}
-
-
 function fetchNewsArticles(feedUrls) {
+  const newsContainer = document.getElementById("news-stories");
   const spinner = document.getElementById("spinner");
   spinner.style.display = "block";
 
@@ -168,7 +123,13 @@ function fetchNewsArticles(feedUrls) {
     .then((allArticles) => {
       const articles = allArticles.flat();
       const sortedArticles = sortArticlesByDate(articles);
-      displayNewsArticles(sortedArticles, newsContainer);
+
+      // Filter articles based on user input
+      const filteredArticles = filterArticles(sortedArticles);
+
+      // Display filtered articles
+      displayNewsArticles(filteredArticles, newsContainer);
+
       spinner.style.display = "none";
     })
     .catch((error) => {
@@ -177,35 +138,34 @@ function fetchNewsArticles(feedUrls) {
     });
 }
 
+function filterArticles(articles) {
+  const sourceFilter = document.getElementById("source-filter").value;
+  const categoryFilter = document.getElementById("category-filter").value;
+  const dateFilter = document.getElementById("date-filter").value;
 
-function fetchRssFeed(feedUrl) {
-  const proxyUrl = "https://api.allorigins.win/raw?url=";
-  const url = proxyUrl + encodeURIComponent(feedUrl);
+  return articles.filter((article) => {
+    let include = true;
 
-  return fetch(url)
-    .then((response) => response.text())
-    .then((data) => {
-      const parser = new DOMParser();
-      const xml = parser.parseFromString(data, "application/xml");
-      const items = xml.querySelectorAll("item");
-      const articles = [];
+    if (sourceFilter && article.source !== sourceFilter) {
+      include = false;
+    }
 
-      items.forEach((item) => {
-        const title = item.querySelector("title").textContent;
-        const link = item.querySelector("link").textContent;
-        const description = item.querySelector("description").textContent;
-        const pubDate = item.querySelector("pubDate").textContent;
-        const imageUrl = item.querySelector("media\\:content, content")?.getAttribute("url") || "";
+    if (categoryFilter && !article.categories.includes(categoryFilter)) {
+      include = false;
+    }
 
-        articles.push({
-          title,
-          link,
-          description,
-          pubDate,
-          imageUrl,
-        });
-      });
+    if (dateFilter && Date.now() - new Date(article.pubDate) > dateFilter * 3600 * 1000) {
+      include = false;
+    }
 
-      return articles;
-    });
+    return include;
+  });
+}
+
+function sortArticlesByDate(articles, descending = true) {
+  return articles.sort((a, b) => {
+    const dateA = new Date(a.pubDate);
+    const dateB = new Date(b.pubDate);
+    return descending ? dateB - dateA : dateA - dateB;
+  });
 }
