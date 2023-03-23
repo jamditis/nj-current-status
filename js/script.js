@@ -133,14 +133,6 @@ function sortArticles(articles) {
   "https://www.nj.com/arc/outboundfeeds/rss/?outputType=xml",
 ]);
 
-function sortArticlesByDate(articles, descending = true) {
-  return articles.sort((a, b) => {
-    const dateA = new Date(a.pubDate);
-    const dateB = new Date(b.pubDate);
-    return descending ? dateB - dateA : dateA - dateB;
-  });
-}
-
 function displayNewsArticles(articles, container) {
   container.innerHTML = "";
 
