@@ -1,73 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NJ Current Status</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <header>
-    <nav>
-      <a href="#" class="logo">NJ Current Status</a>
-      <ul>
-        <!-- Add more navigation links if needed -->
-      </ul>
-      <div class="sort-controls">
-  <button id="sort-newest">Sort by newest</button>
-  <button id="sort-oldest">Sort by oldest</button>
-  <button id="sort-relevance">Sort by relevance</button>
-</div>
-    </nav>
-    <div class="filter-controls">
-  <label for="source-filter">Filter by source:</label>
-  <select id="source-filter">
-    <option value="">All sources</option>
-    <option value="northjersey">NorthJersey.com</option>
-    <option value="app">Asbury Park Press</option>
-    <!-- Add more source options here -->
-  </select>
-  <label for="category-filter">Filter by category:</label>
-  <select id="category-filter">
-    <option value="">All categories</option>
-    <option value="politics">Politics</option>
-    <option value="sports">Sports</option>
-    <!-- Add more category options here -->
-  </select>
-  <label for="date-filter">Filter by date range:</label>
-  <select id="date-filter">
-    <option value="">All dates</option>
-    <option value="24">Last 24 hours</option>
-    <option value="48">Last 48 hours</option>
-    <option value="7">Last 7 days</option>
-    <!-- Add more date range options here -->
-  </select>
-</div>
-
-  </header>
-  <main>
-    <section id="news-stories">
-      <!-- News stories will be loaded dynamically -->
-      <div id="spinner"></div>
-    </section>
-    <aside id="floating-sidebar">
-      <div class="info-panel">
-        <!-- Add information about the website and its creator here -->
-      </div>
-      <div class="trending-stories">
-        <h3>Trending Stories</h3>
-        <select id="trending-date-range">
-          <option value="24">Last 24 hours</option>
-          <option value="48">Last 48 hours</option>
-          <option value="72">Last 72 hours</option>
+<html>
+  <head>
+    <title>News Feed</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" href="https://centerforcooperativemedia.org/wp-content/uploads/2023/03/pattern.png" />
+  </head>
+  <body>
+    <header>
+      <h1>News Feed</h1>
+      <form>
+        <label for="source-filter">Filter by Source:</label>
+        <input type="text" id="source-filter" />
+        <label for="category-filter">Filter by Category:</label>
+        <select id="category-filter">
+          <option value="">All Categories</option>
+          <option value="Sports">Sports</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Business">Business</option>
         </select>
-        <ul id="trending-list">
-          <!-- Trending stories will be loaded dynamically -->
-        </ul>
+        <label for="date-filter">Filter by Date (hours ago):</label>
+        <input type="number" id="date-filter" />
+      </form>
+    </header>
+    <main>
+      <div id="trending">
+        <h2>Trending Stories</h2>
+        <ul id="trending-list"></ul>
+        <label for="trending-date-range">Trending Stories for Last:</label>
+        <select id="trending-date-range">
+          <option value="24">24 hours</option>
+          <option value="48">48 hours</option>
+          <option value="72">72 hours</option>
+          <option value="168">1 week</option>
+        </select>
       </div>
-    </aside>
-  </main>
-
-  <script src="js/script.js"></script>
-</body>
+      <div id="news">
+        <h2>News Stories</h2>
+        <div id="news-stories"></div>
+        <div id="spinner"></div>
+      </div>
+    </main>
+    <script src="script.js"></script>
+  </body>
 </html>
