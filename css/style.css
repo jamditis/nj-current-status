@@ -1,9 +1,9 @@
+/* General styles */
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
   margin: 0;
   padding: 0;
-  position: relative;
 }
 
 .container {
@@ -12,40 +12,79 @@ body {
   overflow: hidden;
 }
 
+/* Header styles */
 header {
   background-color: #333;
-  color: white;
+  color: #fff;
   padding: 1rem;
 }
 
-nav {
+header nav {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
-.logo {
-  font-weight: bold;
+header .logo {
+  font-size: 1.5rem;
   text-decoration: none;
-  color: white;
+  color: #fff;
 }
 
+header ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Filter controls */
 .filter-controls {
+  margin-top: 1rem;
+}
+
+/* Main content */
+main {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-top: 2rem;
 }
 
 #news-stories {
-  width: 70%;
-  float: left;
+  flex: 3;
+  margin-right: 2rem;
 }
 
+/* Floating sidebar */
 #floating-sidebar {
-  width: 28%;
-  position: fixed;
-  right: 1%;
-  top: 10%;
-  background-color: #f7f7f7;
+  flex: 1;
+  position: sticky;
+  top: 2rem;
+}
+
+.info-panel {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
   padding: 1rem;
-  border: 1px solid #ddd
+  margin-bottom: 2rem;
+}
+
+.trending-stories {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  padding: 1rem;
+}
+
+.trending-stories h3 {
+  margin-top: 0;
+}
+
+#trending-date-range {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+#trending-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
